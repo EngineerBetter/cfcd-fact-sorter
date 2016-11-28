@@ -15,7 +15,7 @@ import (
 var cliPath string
 var fixturePath string
 
-var _ = Describe("cfcf-fact-sorter", func() {
+var _ = Describe("cfcd-fact-sorter", func() {
 	BeforeSuite(func() {
 		var err error
 		cliPath, err = Build("github.com/EngineerBetter/cfcd-fact-sorter")
