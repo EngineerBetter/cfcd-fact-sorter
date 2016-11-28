@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -32,8 +31,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("---")
-	fmt.Println(string(outBytes))
+	prependedBytes := append([]byte("---\n"), outBytes...)
+	ioutil.WriteFile(path, prependedBytes, 0644)
 }
 
 func exists(path string) bool {

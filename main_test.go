@@ -3,20 +3,31 @@ package main_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/onsi/gomega/gbytes"
 	. "github.com/onsi/gomega/gexec"
+
+	"github.com/cf-guardian/guardian/kernel/fileutils"
 
 	"io/ioutil"
 	"os/exec"
+	"path/filepath"
 )
 
 var cliPath string
+var fixturePath string
 
 var _ = Describe("cfcf-fact-sorter", func() {
 	BeforeSuite(func() {
 		var err error
 		cliPath, err = Build("github.com/EngineerBetter/cfcd-fact-sorter")
 		Ω(err).ShouldNot(HaveOccurred(), "Error building source")
+
+		tmpDir, err := ioutil.TempDir("", "cfcd-fact-sorter")
+		Ω(err).ShouldNot(HaveOccurred())
+		fixturePath = filepath.Join(tmpDir, "facts.yml")
+
+		fu := fileutils.New()
+		err = fu.Copy(fixturePath, "fixtures/facts.yml")
+		Ω(err).ShouldNot(HaveOccurred())
 	})
 
 	AfterSuite(func() {
@@ -33,11 +44,14 @@ var _ = Describe("cfcf-fact-sorter", func() {
 		})
 
 		It("outputs sorted YAML to stdout", func() {
-			command := exec.Command(cliPath, "fixtures/facts.yml")
+			command := exec.Command(cliPath, fixturePath)
 			session, err := Start(command, GinkgoWriter, GinkgoWriter)
 			Ω(err).ShouldNot(HaveOccurred(), "Error running CLI: "+cliPath)
 			Eventually(session).Should((Exit(0)))
-			Ω(session).Should(Say(sorted))
+
+			bytes, err := ioutil.ReadFile(fixturePath)
+			actual := string(bytes)
+			Ω(actual).Should(Equal(sorted))
 		})
 	})
 })
