@@ -1,0 +1,18 @@
+---
+items:
+- item_id: FDAZ00000
+  facts:
+  - id: AA
+    description: a description
+  - id: AB
+    description: b description
+  - id: AC
+    description: c description
+- item_id: FDZZ00000
+  facts:
+  - id: Z1
+    description: z1 description
+  - id: Z2
+    description: z2 description
+  - id: Z3
+    description: z3 description
