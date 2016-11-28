@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"golang.org/x/crypto/ssh/terminal"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -8,15 +10,27 @@ import (
 
 func main() {
 	args := os.Args
-	path := args[1]
 
-	if !exists(path) {
-		os.Exit(1)
-	}
+	var bytes []byte
+	var err error
 
-	bytes, err := ioutil.ReadFile(path)
-	if err != nil {
-		os.Exit(1)
+	if len(args) == 2 {
+		path := args[1]
+
+		if !exists(path) {
+			os.Exit(1)
+		}
+
+		bytes, err = ioutil.ReadFile(path)
+		if err != nil {
+			os.Exit(1)
+		}
+	} else {
+		if !terminal.IsTerminal(0) {
+			bytes, _ = ioutil.ReadAll(os.Stdin)
+		} else {
+			os.Exit(1)
+		}
 	}
 
 	items := Items{}
@@ -32,7 +46,12 @@ func main() {
 	}
 
 	prependedBytes := append([]byte("---\n"), outBytes...)
-	ioutil.WriteFile(path, prependedBytes, 0644)
+	if len(args) == 2 {
+		path := args[1]
+		ioutil.WriteFile(path, prependedBytes, 0644)
+	} else {
+		fmt.Println(string(prependedBytes))
+	}
 }
 
 func exists(path string) bool {
