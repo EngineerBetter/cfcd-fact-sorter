@@ -7,7 +7,6 @@ import (
 	. "github.com/EngineerBetter/cfcd-fact-sorter"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"sort"
 )
 
 var _ = Describe("sorting shizzle", func() {
@@ -17,7 +16,8 @@ var _ = Describe("sorting shizzle", func() {
 
 		items := Items{}
 		err = yaml.Unmarshal(bytes, &items)
-		sort.Sort(items)
+		items.Sort()
 		Ω(items.Items[0].ItemId).Should(Equal("FDAZ00000"))
+		Ω(items.Items[0].Facts[0].Id).Should(Equal("AA"))
 	})
 })
