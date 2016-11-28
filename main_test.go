@@ -43,7 +43,7 @@ var _ = Describe("cfcd-fact-sorter", func() {
 			sorted = string(bytes)
 		})
 
-		It("outputs sorted YAML to stdout", func() {
+		It("outputs sorted YAML over the input file specified", func() {
 			command := exec.Command(cliPath, fixturePath)
 			session, err := Start(command, GinkgoWriter, GinkgoWriter)
 			Ω(err).ShouldNot(HaveOccurred(), "Error running CLI: "+cliPath)
