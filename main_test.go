@@ -19,5 +19,6 @@ var _ = Describe("sorting shizzle", func() {
 		items.Sort()
 		Ω(items.Items[0].ItemId).Should(Equal("FDAZ00000"))
 		Ω(items.Items[0].Facts[0].Id).Should(Equal("AA"))
+		Ω(items.Items[0].Facts[0].Description).Should(Equal("a description"))
 	})
 })
