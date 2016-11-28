@@ -1,6 +1,7 @@
 package main
 
-import ()
+func main() {
+}
 
 type Fact struct {
 	Id          string
